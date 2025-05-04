@@ -1,0 +1,134 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Controle Financeiro Interativo</title>
+    <!-- Bootstrap CSS -->
+    <link
+      href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css"
+      rel="stylesheet"
+    />
+    <!-- Nosso CSS personalizado -->
+    <link href="assets/css/style.css" rel="stylesheet" />
+  </head>
+  <body>
+    <!-- A barra de navegação -->
+    <nav class="navbar navbar-dark bg-primary">
+      <div class="container">
+        <span class="navbar-brand"> Finanças Interativas</span>
+        <div id="saldo-atual" class="text-white fw-bold">Saldo: R$ 0,00</div>
+      </div>
+    </nav>
+
+    <!-- Conteúdo principal que vai ter no prótipo -->
+    <main class="container my-5">
+      <div class="row">
+        <div class="col-md-6">
+          <h1 class="mb-3">Seu dinheiro</h1>
+          <p class="lead">Pare de gastar muito com esse site</p>
+
+          <!-- Onde você pode adicionar as transações -->
+          <div class="card mb-4">
+            <div class="card-body">
+              <h5 class="card-title">Transação</h5>
+              <form id="form-transacao">
+                <div class="mb-3">
+                  <label class="form-label">Descrição</label>
+                  <input
+                    type="text"
+                    id="descricao"
+                    class="form-control"
+                    required
+                  />
+                </div>
+                <div class="mb-3">
+                  <label class="form-label">Valor (R$)</label>
+                  <input
+                    type="number"
+                    id="valor"
+                    class="form-control"
+                    step="0.01"
+                    required
+                  />
+                </div>
+                <div class="mb-3">
+                  <label class="form-label">Tipo</label>
+                  <select id="tipo" class="form-select">
+                    <option value="receita">Receita</option>
+                    <option value="despesa">Despesa</option>
+                  </select>
+                </div>
+                <button type="submit" class="btn btn-primary">Adicionar</button>
+              </form>
+            </div>
+          </div>
+        </div>
+
+        <div class="col-md-6">
+          <!-- Gráfico -->
+          <div class="chart-placeholder mb-4">
+            <p>Gráfico</p>
+          </div>
+
+          <!-- Resumo financeiro pessoal da pessoa -->
+          <div class="card">
+            <div class="card-body">
+              <h5 class="card-title">Resumo Financeiro mensal</h5>
+              <div class="d-flex justify-content-between mb-2">
+                <span>Receitas:</span>
+                <span id="total-receitas" class="text-success">R$ 0,00</span>
+              </div>
+              <div class="d-flex justify-content-between mb-2">
+                <span>Despesas:</span>
+                <span id="total-despesas" class="text-danger">R$ 0,00</span>
+              </div>
+              <hr />
+              <div class="d-flex justify-content-between fw-bold">
+                <span>Saldo:</span>
+                <span id="saldo-resumo">R$ 0,00</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- As transações -->
+      <div class="row mt-5">
+        <div class="col-12">
+          <h3 class="mb-3">Histórico de Transações</h3>
+          <div class="table-responsive">
+            <table class="table" id="tabela-transacoes">
+              <thead>
+                <tr>
+                  <th>Data</th>
+                  <th>Descrição</th>
+                  <th>Tipo</th>
+                  <th>Valor</th>
+                  <th>Ações</th>
+                </tr>
+              </thead>
+              <tbody>
+                <!-- aqui seria a parte do java, mas acho que vai criar outra pasta para fazer -->
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+    </main>
+
+    <!-- Rodapé do website -->
+    <footer class="bg-dark text-white py-3 mt-5">
+      <div class="container text-center">
+        <p class="mb-0">
+          Etec martinho: Kauã, Hector, João Pedro Lopes Bonato dos Santos
+          <span id="ano-atual"></span>
+        </p>
+      </div>
+    </footer>
+
+    <!-- Bootstrap JS -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="assets/js/app.js"></script>
+  </body>
+</html>

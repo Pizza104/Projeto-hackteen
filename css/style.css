@@ -1,0 +1,75 @@
+/* Cores principais */
+:root {
+  --azul: #4361ee;
+  --azul-escuro: #3a0ca3;
+}
+
+/* Estilos básicos */
+body {
+  font-family: Arial, sans-serif;
+  background: #f8f9fa;
+  margin: 0;
+  padding: 0;
+  line-height: 1.5;
+}
+
+/* Cabeçalho */
+.navbar {
+  background: var(--azul);
+  padding: 1rem;
+  color: white;
+}
+
+.navbar-brand {
+  font-weight: bold;
+  font-size: 1.2rem;
+}
+
+/* Conteúdo principal */
+.container {
+  max-width: 1200px;
+  margin: 2rem auto;
+  padding: 0 1rem;
+}
+
+h1 {
+  color: var(--azul-escuro);
+  margin-bottom: 1rem;
+}
+
+.lead {
+  color: #555;
+  margin-bottom: 2rem;
+}
+
+/* A parte do gráfico, se achar que não dá para fazer o gráfico, pode tirar do código*/
+.chart-placeholder {
+  background: white;
+  height: 250px;
+  border-radius: 8px;
+  border-top: 4px solid var(--azul);
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: 2rem;
+}
+
+/* Botão adicionar */
+.btn-primary {
+  background: var(--azul);
+  color: white;
+  border: none;
+  padding: 0.7rem 1.5rem;
+  border-radius: 4px;
+  cursor: pointer;
+}
+
+/* Rodapé do site */
+footer {
+  background: #333;
+  color: white;
+  text-align: center;
+  padding: 1.5rem;
+  margin-top: 3rem;
+}
