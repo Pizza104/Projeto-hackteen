@@ -17,7 +17,7 @@
     <nav class="navbar navbar-dark bg-primary">
       <div class="container">
         <span class="navbar-brand"> Finanças Interativas</span>
-        <div id="saldo-atual" class="text-white fw-bold">Saldo: R$ 0,00</div>
+        <div id="saldoConta" class="text-white fw-bold">Saldo: R$ 0,00</div>
       </div>
     </nav>
 
@@ -59,7 +59,17 @@
                     <option value="despesa">Despesa</option>
                   </select>
                 </div>
-                <button type="submit" class="btn btn-primary">Adicionar</button>
+                <div class="mb-3">
+                  <label class="form-label">Data</label>
+                  <input type="date" id="data" class="form-control" required />
+                </div>
+                <button
+                  type="button"
+                  class="btn btn-primary"
+                  onclick="adicionarTransacao()"
+                >
+                  Adicionar
+                </button>
               </form>
             </div>
           </div>
@@ -69,6 +79,7 @@
           <!-- Gráfico -->
           <div class="chart-placeholder mb-4">
             <p>Gráfico</p>
+            <canvas id="graficoTransacoes"></canvas>
           </div>
 
           <!-- Resumo financeiro pessoal da pessoa -->
@@ -105,12 +116,9 @@
                   <th>Descrição</th>
                   <th>Tipo</th>
                   <th>Valor</th>
-                  <th>Ações</th>
                 </tr>
               </thead>
-              <tbody>
-                <!-- aqui seria a parte do java, mas acho que vai criar outra pasta para fazer -->
-              </tbody>
+              <tbody></tbody>
             </table>
           </div>
         </div>
@@ -128,6 +136,7 @@
     </footer>
 
     <!-- Bootstrap JS -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
     <script src="assets/js/app.js"></script>
   </body>
