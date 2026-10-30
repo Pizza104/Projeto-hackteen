@@ -1,142 +1,406 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="pt-BR">
   <head>
     <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Controle Financeiro Interativo</title>
-    <!-- Bootstrap CSS -->
-    <link
-      href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css"
-      rel="stylesheet"
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta
+      name="description"
+      content="Organize receitas e despesas, edite lançamentos e acompanhe seu resultado mensal."
     />
-    <!-- Nosso CSS personalizado -->
+    <meta name="theme-color" content="#17233c" />
+    <title>Meu Bolso | Finanças Interativas</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet" />
     <link href="assets/css/style.css" rel="stylesheet" />
   </head>
   <body>
-    <!-- A barra de navegação -->
-    <nav class="navbar navbar-dark bg-primary">
-      <div class="container">
-        <span class="navbar-brand"> Finanças Interativas</span>
-        <div id="saldoConta" class="text-white fw-bold">Saldo: R$ 0,00</div>
-      </div>
-    </nav>
+    <a class="skip-link" href="#conteudo">Pular para o conteúdo</a>
 
-    <!-- Conteúdo principal que vai ter no prótipo -->
-    <main class="container my-5">
-      <div class="row">
-        <div class="col-md-6">
-          <h1 class="mb-3">Seu dinheiro</h1>
-          <p class="lead">Pare de gastar muito com esse site</p>
+    <main id="acesso" class="auth-page">
+      <section class="auth-card" aria-labelledby="titulo-acesso">
+        <div class="auth-brand"><span class="brand-icon" aria-hidden="true">$</span><span>Meu Bolso</span></div>
+        <p class="eyebrow mb-2">Seu caderno financeiro</p>
+        <h1 id="titulo-acesso" class="auth-title">Organize suas contas no seu ritmo.</h1>
+        <p class="auth-intro">Crie um perfil local ou entre para ver sua planilha.</p>
 
-          <!-- Onde você pode adicionar as transações -->
-          <div class="card mb-4">
-            <div class="card-body">
-              <h5 class="card-title">Transação</h5>
-              <form id="form-transacao">
-                <div class="mb-3">
-                  <label class="form-label">Descrição</label>
-                  <input
-                    type="text"
-                    id="descricao"
-                    class="form-control"
-                    required
-                  />
-                </div>
-                <div class="mb-3">
-                  <label class="form-label">Valor (R$)</label>
-                  <input
-                    type="number"
-                    id="valor"
-                    class="form-control"
-                    step="0.01"
-                    required
-                  />
-                </div>
-                <div class="mb-3">
-                  <label class="form-label">Tipo</label>
-                  <select id="tipo" class="form-select">
-                    <option value="receita">Receita</option>
-                    <option value="despesa">Despesa</option>
-                  </select>
-                </div>
-                <div class="mb-3">
-                  <label class="form-label">Data</label>
-                  <input type="date" id="data" class="form-control" required />
-                </div>
-                <button
-                  type="button"
-                  class="btn btn-primary"
-                  onclick="adicionarTransacao()"
-                >
-                  Adicionar
-                </button>
-              </form>
+        <div class="alert auth-notice" role="note">
+          <strong>Protótipo escolar:</strong> os perfis e dados ficam somente neste navegador. Não há servidor,
+          recuperação de senha nem proteção para uso real. Não reutilize uma senha pessoal.
+        </div>
+        <div id="auth-status" class="alert d-none" role="status" aria-live="polite"></div>
+
+        <div class="auth-tabs" role="tablist" aria-label="Entrar ou criar perfil">
+          <button
+            id="tab-entrar"
+            class="auth-tab active"
+            type="button"
+            role="tab"
+            aria-selected="true"
+            aria-controls="painel-entrar"
+          >
+            Entrar
+          </button>
+          <button
+            id="tab-cadastro"
+            class="auth-tab"
+            type="button"
+            role="tab"
+            aria-selected="false"
+            aria-controls="painel-cadastro"
+          >
+            Criar perfil
+          </button>
+        </div>
+
+        <form id="form-entrar" class="auth-form" novalidate>
+          <div class="mb-3">
+            <label for="login-email" class="form-label">E-mail do perfil</label>
+            <input
+              id="login-email"
+              class="form-control"
+              type="email"
+              autocomplete="username"
+              maxlength="120"
+              required
+            />
+            <div class="invalid-feedback">Informe o e-mail usado no cadastro.</div>
+          </div>
+          <div class="mb-3">
+            <label for="login-senha" class="form-label">Senha</label>
+            <input id="login-senha" class="form-control" type="password" autocomplete="current-password" required />
+            <div class="invalid-feedback">Digite sua senha.</div>
+          </div>
+          <button class="btn btn-primary w-100" type="submit">Entrar no Meu Bolso</button>
+        </form>
+
+        <form id="form-cadastro" class="auth-form d-none" novalidate>
+          <div class="mb-3">
+            <label for="cadastro-nome" class="form-label">Como podemos te chamar?</label>
+            <input id="cadastro-nome" class="form-control" type="text" autocomplete="name" maxlength="50" required />
+            <div class="invalid-feedback">Informe um nome (até 50 caracteres).</div>
+          </div>
+          <div class="mb-3">
+            <label for="cadastro-email" class="form-label">E-mail do perfil</label>
+            <input
+              id="cadastro-email"
+              class="form-control"
+              type="email"
+              autocomplete="email"
+              maxlength="120"
+              required
+            />
+            <div class="invalid-feedback">Digite um e-mail válido.</div>
+          </div>
+          <div class="mb-3">
+            <label for="cadastro-senha" class="form-label">Crie uma senha</label>
+            <input
+              id="cadastro-senha"
+              class="form-control"
+              type="password"
+              autocomplete="new-password"
+              minlength="8"
+              required
+              aria-describedby="senha-ajuda"
+            />
+            <div id="senha-ajuda" class="form-text">
+              Pelo menos 8 caracteres. Use uma senha exclusiva para este protótipo.
             </div>
+            <div class="invalid-feedback">A senha precisa ter pelo menos 8 caracteres.</div>
           </div>
-        </div>
-
-        <div class="col-md-6">
-          <!-- Gráfico -->
-          <div class="chart-placeholder mb-4">
-            <p>Gráfico</p>
-            <canvas id="graficoTransacoes"></canvas>
-          </div>
-
-          <!-- Resumo financeiro pessoal da pessoa -->
-          <div class="card">
-            <div class="card-body">
-              <h5 class="card-title">Resumo Financeiro mensal</h5>
-              <div class="d-flex justify-content-between mb-2">
-                <span>Receitas:</span>
-                <span id="total-receitas" class="text-success">R$ 0,00</span>
-              </div>
-              <div class="d-flex justify-content-between mb-2">
-                <span>Despesas:</span>
-                <span id="total-despesas" class="text-danger">R$ 0,00</span>
-              </div>
-              <hr />
-              <div class="d-flex justify-content-between fw-bold">
-                <span>Saldo:</span>
-                <span id="saldo-resumo">R$ 0,00</span>
-              </div>
+          <button class="btn btn-primary w-100" type="submit">Criar perfil local</button>
+        </form>
+        <p class="auth-footnote mb-0">
+          A senha é verificada localmente para a demonstração; isto não substitui autenticação de um sistema real.
+        </p>
+      </section>
+      <aside class="auth-aside" aria-hidden="true">
+        <div class="aside-orbit orbit-one"></div>
+        <div class="aside-orbit orbit-two"></div>
+        <div class="aside-content">
+          <p class="eyebrow text-white-50">Controle sem complicação</p>
+          <h2>Uma planilha simples, com tudo no lugar.</h2>
+          <ul class="aside-list">
+            <li>Receitas e despesas por categoria</li>
+            <li>Busca, filtros e edição</li>
+            <li>Resumo mensal e exportação CSV</li>
+          </ul>
+          <div class="aside-sheet">
+            <div class="sheet-line sheet-head"><span>DATA</span><span>DESCRIÇÃO</span><span>VALOR</span></div>
+            <div class="sheet-line"><span>15/10</span><span>Pagamento</span><strong>+ R$ 2.400</strong></div>
+            <div class="sheet-line">
+              <span>18/10</span><span>Mercado</span><strong class="sheet-negative">− R$ 186</strong>
             </div>
+            <div class="sheet-total"><span>Resultado</span><strong>R$ 2.214</strong></div>
           </div>
         </div>
-      </div>
-
-      <!-- As transações -->
-      <div class="row mt-5">
-        <div class="col-12">
-          <h3 class="mb-3">Histórico de Transações</h3>
-          <div class="table-responsive">
-            <table class="table" id="tabela-transacoes">
-              <thead>
-                <tr>
-                  <th>Data</th>
-                  <th>Descrição</th>
-                  <th>Tipo</th>
-                  <th>Valor</th>
-                </tr>
-              </thead>
-              <tbody></tbody>
-            </table>
-          </div>
-        </div>
-      </div>
+      </aside>
     </main>
 
-    <!-- Rodapé do website -->
-    <footer class="bg-dark text-white py-3 mt-5">
-      <div class="container text-center">
-        <p class="mb-0">
-          Etec martinho: Kauã, Hector, João Pedro Lopes Bonato dos Santos
-          <span id="ano-atual"></span>
-        </p>
-      </div>
-    </footer>
+    <div id="aplicativo" class="d-none">
+      <nav class="navbar navbar-expand-lg navbar-dark app-navbar">
+        <div class="container">
+          <a class="navbar-brand d-flex align-items-center gap-2" href="#conteudo" aria-label="Meu Bolso, início">
+            <span class="brand-icon" aria-hidden="true">$</span><span>Meu Bolso</span>
+          </a>
+          <div class="d-flex align-items-center gap-3">
+            <span id="usuario-atual" class="navbar-text d-none d-sm-inline"></span>
+            <button id="sair" class="btn btn-sm btn-outline-light" type="button">Sair</button>
+          </div>
+        </div>
+      </nav>
 
-    <!-- Bootstrap JS -->
-    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+      <main id="conteudo" class="container app-content">
+        <header class="page-intro d-flex flex-column flex-lg-row align-items-lg-end justify-content-between gap-3">
+          <div>
+            <p class="eyebrow mb-2">Finanças Interativas</p>
+            <h1>Seu dinheiro, organizado em um só lugar.</h1>
+            <p class="intro-copy mb-0">Registre, categorize e acompanhe suas movimentações do mês.</p>
+          </div>
+          <span class="badge rounded-pill storage-badge"
+            ><span class="privacy-dot" aria-hidden="true"></span> Salvo neste dispositivo</span
+          >
+        </header>
+
+        <div id="mensagem-status" class="alert d-none" role="status" aria-live="polite"></div>
+        <div class="alert privacy-alert d-flex align-items-start gap-2" role="note">
+          <span class="privacy-alert-icon" aria-hidden="true">i</span>
+          <p class="mb-0">
+            <strong>Importante:</strong> perfil demonstrativo; lançamentos e dados de acesso ficam neste navegador. Não
+            use senha real nem dados financeiros sensíveis. Para um sistema público, é necessário um servidor com
+            autenticação adequada.
+          </p>
+        </div>
+
+        <section class="row g-3 mb-4" aria-label="Resumo do mês">
+          <div class="col-md-4">
+            <article class="card summary-card h-100">
+              <div class="card-body">
+                <div class="summary-top">
+                  <span class="summary-label">Receitas</span
+                  ><span class="summary-symbol income-symbol" aria-hidden="true">↗</span>
+                </div>
+                <p id="total-receitas" class="summary-value income-value mb-1">R$ 0,00</p>
+                <p class="summary-hint mb-0">Entradas no mês</p>
+              </div>
+            </article>
+          </div>
+          <div class="col-md-4">
+            <article class="card summary-card h-100">
+              <div class="card-body">
+                <div class="summary-top">
+                  <span class="summary-label">Despesas</span
+                  ><span class="summary-symbol expense-symbol" aria-hidden="true">↘</span>
+                </div>
+                <p id="total-despesas" class="summary-value expense-value mb-1">R$ 0,00</p>
+                <p class="summary-hint mb-0">Saídas no mês</p>
+              </div>
+            </article>
+          </div>
+          <div class="col-md-4">
+            <article class="card summary-card balance-card h-100">
+              <div class="card-body">
+                <div class="summary-top">
+                  <span id="rotulo-resultado" class="summary-label">Resultado do mês</span
+                  ><span class="summary-symbol balance-symbol" aria-hidden="true">=</span>
+                </div>
+                <p id="saldo-resumo" class="summary-value mb-1">R$ 0,00</p>
+                <p class="summary-hint mb-0">Receitas − despesas (lucro/sobra ou déficit)</p>
+              </div>
+            </article>
+          </div>
+        </section>
+
+        <section class="row g-4 align-items-stretch mb-4">
+          <div class="col-lg-5">
+            <div class="card app-card h-100">
+              <div class="card-body p-4">
+                <div class="card-heading mb-4">
+                  <p class="eyebrow mb-1" id="rotulo-formulario">Novo lançamento</p>
+                  <h2 class="h4 mb-0" id="titulo-formulario">Adicione à sua planilha</h2>
+                </div>
+                <form id="form-transacao" novalidate>
+                  <div class="mb-3">
+                    <label for="descricao" class="form-label">Descrição</label
+                    ><input
+                      type="text"
+                      id="descricao"
+                      class="form-control"
+                      maxlength="80"
+                      autocomplete="off"
+                      placeholder="Ex.: mercado, salário"
+                      required
+                      aria-describedby="descricao-erro"
+                    />
+                    <div id="descricao-erro" class="invalid-feedback">Escreva uma descrição (até 80 caracteres).</div>
+                  </div>
+                  <div class="mb-3">
+                    <label for="valor" class="form-label">Valor</label>
+                    <div class="input-group has-validation">
+                      <span class="input-group-text">R$</span
+                      ><input
+                        type="number"
+                        id="valor"
+                        class="form-control"
+                        min="0.01"
+                        step="0.01"
+                        inputmode="decimal"
+                        placeholder="0,00"
+                        required
+                        aria-describedby="valor-erro"
+                      />
+                      <div id="valor-erro" class="invalid-feedback">Informe um valor maior que zero.</div>
+                    </div>
+                  </div>
+                  <div class="row g-3 mb-3">
+                    <div class="col-sm-6">
+                      <label for="tipo" class="form-label">Movimentação</label
+                      ><select id="tipo" class="form-select" required>
+                        <option value="receita">Receita (entrada)</option>
+                        <option value="despesa">Despesa (saída)</option>
+                      </select>
+                    </div>
+                    <div class="col-sm-6">
+                      <label for="categoria" class="form-label">Categoria</label
+                      ><select id="categoria" class="form-select" required></select>
+                    </div>
+                  </div>
+                  <div class="mb-3">
+                    <label for="data" class="form-label">Data</label
+                    ><input type="date" id="data" class="form-control" required aria-describedby="data-erro" />
+                    <div id="data-erro" class="invalid-feedback">Escolha uma data válida.</div>
+                  </div>
+                  <div class="mb-3">
+                    <label for="observacao" class="form-label"
+                      >Observação <span class="optional-label">(opcional)</span></label
+                    ><textarea
+                      id="observacao"
+                      class="form-control"
+                      rows="2"
+                      maxlength="160"
+                      placeholder="Um detalhe que queira guardar"
+                    ></textarea>
+                  </div>
+                  <div class="d-flex gap-2">
+                    <button id="salvar-transacao" type="submit" class="btn btn-primary flex-grow-1">
+                      <span aria-hidden="true">+</span> Adicionar lançamento</button
+                    ><button id="cancelar-edicao" type="button" class="btn btn-outline-secondary d-none">
+                      Cancelar
+                    </button>
+                  </div>
+                </form>
+              </div>
+            </div>
+          </div>
+          <div class="col-lg-7">
+            <section class="card app-card chart-card h-100" aria-labelledby="titulo-grafico">
+              <div class="card-body p-4 d-flex flex-column">
+                <div class="card-heading d-flex justify-content-between align-items-start gap-2 mb-3">
+                  <div>
+                    <p class="eyebrow mb-1">Visão do mês</p>
+                    <h2 id="titulo-grafico" class="h4 mb-0">Receitas e despesas</h2>
+                  </div>
+                  <span id="rotulo-mes-grafico" class="chart-caption">Mês selecionado</span>
+                </div>
+                <div class="chart-wrap flex-grow-1">
+                  <div id="estado-grafico" class="chart-empty">
+                    <span class="chart-empty-mark" aria-hidden="true">◔</span>
+                    <p class="mb-0">Adicione lançamentos neste mês para ver o gráfico.</p>
+                  </div>
+                  <canvas
+                    id="graficoTransacoes"
+                    role="img"
+                    aria-label="Gráfico comparando receitas e despesas"
+                  ></canvas>
+                </div>
+                <div class="chart-legend d-flex justify-content-center gap-4 mt-3">
+                  <span><i class="legend-dot legend-income"></i>Receitas</span
+                  ><span><i class="legend-dot legend-expense"></i>Despesas</span>
+                </div>
+              </div>
+            </section>
+          </div>
+        </section>
+
+        <section class="card app-card history-card" aria-labelledby="titulo-historico">
+          <div class="card-body p-4">
+            <div class="d-flex flex-column flex-xl-row justify-content-between align-items-xl-end gap-3 mb-4">
+              <div class="card-heading">
+                <p class="eyebrow mb-1">Visão de planilha</p>
+                <h2 id="titulo-historico" class="h4 mb-0">Lançamentos</h2>
+                <p id="contador-transacoes" class="small text-secondary mb-0 mt-1">Nenhum lançamento</p>
+              </div>
+              <div class="table-tools">
+                <div>
+                  <label for="filtro-mes" class="tool-label">Mês</label
+                  ><input type="month" id="filtro-mes" class="form-control" aria-label="Filtrar por mês" />
+                </div>
+                <div>
+                  <label for="filtro-tipo" class="tool-label">Tipo</label
+                  ><select id="filtro-tipo" class="form-select">
+                    <option value="todos">Todos</option>
+                    <option value="receita">Receitas</option>
+                    <option value="despesa">Despesas</option>
+                  </select>
+                </div>
+                <div>
+                  <label for="filtro-categoria" class="tool-label">Categoria</label
+                  ><select id="filtro-categoria" class="form-select">
+                    <option value="todas">Todas</option>
+                  </select>
+                </div>
+                <div class="search-tool">
+                  <label for="busca-transacao" class="tool-label">Buscar</label
+                  ><input id="busca-transacao" type="search" class="form-control" placeholder="Descrição ou nota" />
+                </div>
+                <button
+                  id="exportar-csv"
+                  class="btn btn-outline-secondary tool-export"
+                  type="button"
+                  title="Exportar lançamentos filtrados em CSV"
+                >
+                  <span aria-hidden="true">↓</span> Exportar CSV
+                </button>
+              </div>
+            </div>
+            <div class="table-responsive">
+              <table class="table align-middle transaction-table mb-0">
+                <thead>
+                  <tr>
+                    <th scope="col">Data</th>
+                    <th scope="col">Descrição / observação</th>
+                    <th scope="col">Categoria</th>
+                    <th scope="col">Tipo</th>
+                    <th scope="col" class="text-end">Valor</th>
+                    <th scope="col"><span class="visually-hidden">Ações</span></th>
+                  </tr>
+                </thead>
+                <tbody id="tabela-transacoes">
+                  <tr id="estado-vazio">
+                    <td colspan="6">
+                      <div class="empty-state">
+                        <span class="empty-state-icon" aria-hidden="true">＋</span>
+                        <p class="fw-semibold mb-1">Nenhum lançamento encontrado</p>
+                        <p class="small text-secondary mb-0">Adicione uma receita ou despesa, ou altere os filtros.</p>
+                      </div>
+                    </td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </section>
+      </main>
+      <footer class="app-footer">
+        <div class="container d-flex flex-column flex-md-row justify-content-between gap-2">
+          <p class="mb-0">Projeto Hackteen · Etec Martinho</p>
+          <p class="mb-0">
+            Kauã, Hector e João Pedro Lopes Bonato dos Santos <span aria-hidden="true">·</span>
+            <span id="ano-atual"></span>
+          </p>
+        </div>
+      </footer>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
     <script src="assets/js/app.js"></script>
   </body>
